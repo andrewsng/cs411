@@ -4,19 +4,47 @@ using std::cout;
 using std::vector;
 
 
+enum class Suit
+{
+    Clubs,
+    Diamonds,
+    Hearts,
+    Spades,
+};
+
+
+struct Card
+{
+    int value{};
+    Suit suit{};
+};
+
+
 int main()
 {
-    size_t deckSize = 5;
-    vector<int> cards(deckSize);
+    const int suitSize = 13;
+    const int deckSize = suitSize * 4;
+    vector<Card> cards(deckSize);
     std::cout << cards.size() << "\n";
-    for (size_t i = 0; i < cards.size(); ++i)
+    for (int suitNum = 0; suitNum < 4; ++suitNum)
     {
-        cards[i] = i + 1;
+        Suit suit{};
+        switch (suitNum)
+        {
+            case 0: suit = Suit::Clubs;    break;
+            case 1: suit = Suit::Diamonds; break;
+            case 2: suit = Suit::Hearts;   break;
+            case 3: suit = Suit::Spades;   break;
+        }
+        for (int i = suitSize * suitNum; i < suitSize * (suitNum + 1); ++i)
+        {
+            cards[i] = Card{ (i % suitSize) + 1, suit };
+        }
     }
 
-    vector<vector<int>> combinations{};
+    vector<vector<Card>> combinations{};
     size_t handSize = 3;
-    vector<int> comb(handSize);
+    vector<Card> comb(handSize);
     for (size_t min1 = 0; min1 < deckSize; ++min1)
     {
         comb[0] = cards[min1];
@@ -30,11 +58,20 @@ int main()
             }
         }
     }
+    std::cout << "# combinations: " << combinations.size() << "\n";
     for (const auto &comb : combinations)
     {
         for (const auto &card : comb)
         {
-            std::cout << card;
+            char s{};
+            switch (card.suit)
+            {
+                case Suit::Clubs:    s = 'C'; break;
+                case Suit::Diamonds: s = 'D'; break;
+                case Suit::Hearts:   s = 'H'; break;
+                case Suit::Spades:   s = 'S'; break;
+            }
+            std::cout << card.value << s << ",";
         }
         std::cout << "\n";
     }
