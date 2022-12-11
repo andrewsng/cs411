@@ -2,6 +2,12 @@
 using std::cout;
 #include <vector>
 using std::vector;
+#include <string>
+using std::string;
+#include <map>
+using std::map;
+#include <algorithm>
+using std::sort;
 
 
 enum class Suit
@@ -76,4 +82,58 @@ int main()
         std::cout << "\n";
     }
     std::cout << std::endl;
+
+    map<string, int> frequencies{};
+    for (const auto &comb : combinations)
+    {
+        string result{};
+        vector<Card> hand = comb;
+        sort(hand.begin(), hand.end(), [](const Card &a, const Card &b) { return a.value < b.value; });
+        const Card &c1 = hand[0];
+        const Card &c2 = hand[1];
+        const Card &c3 = hand[2];
+        bool straight = false;
+        bool flush = false;
+        if (c1.suit == c2.suit && c2.suit == c3.suit)
+        {
+            flush = true;
+        }
+        if (c1.value == c2.value - 1 && c1.value == c3.value - 2)
+        {
+            straight = true;
+        }
+        if (c1.value == 1 && c2.value == 12 && c3.value == 13)
+        {
+            straight = true;
+        }
+        if (straight && flush)
+        {
+            result = "Straight Flush";
+        }
+        else if (c1.value == c2.value && c2.value == c3.value)
+        {
+            result = "Three of a Kind";
+        }
+        else if (straight)
+        {
+            result = "Straight";
+        }
+        else if (flush)
+        {
+            result = "Flush";
+        }
+        else if (c1.value == c2.value || c2.value == c3.value || c1.value == c3.value)
+        {
+            result = "Pair";
+        }
+        else
+        {
+            result = "High Card";
+        }
+        frequencies[result] += 1;
+    }
+    for (const auto &[k, v] : frequencies)
+    {
+        std::cout << k << " - " << v << "\n";
+    }
 }
