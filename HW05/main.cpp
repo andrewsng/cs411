@@ -31,7 +31,6 @@ int main()
     const int suitSize = 13;
     const int deckSize = suitSize * 4;
     vector<Card> cards(deckSize);
-    std::cout << cards.size() << "\n";
     for (int suitNum = 0; suitNum < 4; ++suitNum)
     {
         Suit suit{};
@@ -64,24 +63,6 @@ int main()
             }
         }
     }
-    std::cout << "# combinations: " << combinations.size() << "\n";
-    for (const auto &comb : combinations)
-    {
-        for (const auto &card : comb)
-        {
-            char s{};
-            switch (card.suit)
-            {
-                case Suit::Clubs:    s = 'C'; break;
-                case Suit::Diamonds: s = 'D'; break;
-                case Suit::Hearts:   s = 'H'; break;
-                case Suit::Spades:   s = 'S'; break;
-            }
-            std::cout << card.value << s << ",";
-        }
-        std::cout << "\n";
-    }
-    std::cout << std::endl;
 
     map<string, int> frequencies{};
     for (const auto &comb : combinations)
@@ -134,6 +115,6 @@ int main()
     }
     for (const auto &[k, v] : frequencies)
     {
-        std::cout << k << " - " << v << "\n";
+        std::cout << k << " - " << v << " - " << double(v) / combinations.size() << "\n";
     }
 }
